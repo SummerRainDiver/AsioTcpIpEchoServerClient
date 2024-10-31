@@ -8,6 +8,7 @@
 #include <boost/asio.hpp>
 
 using boost::asio::ip::tcp;
+using namespace std;
 
 class session
     : public std::enable_shared_from_this<session>
@@ -20,6 +21,7 @@ public:
 
     void start()
     {
+        cout << "Create Session..." << endl;
         do_read();
     }
 
@@ -32,6 +34,7 @@ private:
             {
                 if (!ec)
                 {
+                    cout << "Do Write..." << endl;
                     do_write(length);
                 }
             });
@@ -45,6 +48,7 @@ private:
             {
                 if (!ec)
                 {
+                    cout << "Do read..." << endl;
                     do_read();
                 }
             });
@@ -75,6 +79,7 @@ private:
                     std::make_shared<session>(std::move(socket))->start();
                 }
 
+                cout << "Do Accept..." << endl;
                 do_accept();
             });
     }

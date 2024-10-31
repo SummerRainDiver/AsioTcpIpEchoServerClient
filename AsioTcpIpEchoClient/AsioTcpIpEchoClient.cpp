@@ -62,20 +62,25 @@
 // to message sending.
 //
 
+const std::string& SERVER_IP = "127.0.0.1";
+const std::string& PORT_NUMBER = "3100";
+# define BOOST_ASIO_STRING_VIEW_PARAM const std::string&
 
 int main()
 {
     boost::asio::io_context io_context;
     tcp::resolver r(io_context);
     client c(io_context);
-    tcp::resolver::query q("127.0.0.1", "3333");
 
     try
     {
         //c.start(r.resolve(argv[1], argv[2])); -- "Usage: client <host> <port>\n";
-        c.start(r.resolve(q));
+        //c.start(r.resolve(q)); 
+        c.start(r.resolve(SERVER_IP, PORT_NUMBER));
 
+        cout << "Client On..." << endl;
         io_context.run();
+        cout << "Client Off..." << endl;
     }
     catch (std::exception& e)
     {

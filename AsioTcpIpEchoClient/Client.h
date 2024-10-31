@@ -15,6 +15,8 @@ using boost::asio::ip::tcp;
 using std::placeholders::_1;
 using std::placeholders::_2;
 
+using namespace std;
+
 class client
 {
 public:
@@ -160,7 +162,7 @@ private:
             return;
 
         // Start an asynchronous operation to send a heartbeat message.
-        boost::asio::async_write(socket_, boost::asio::buffer("\n", 1),
+        boost::asio::async_write(socket_, boost::asio::buffer("hey\n", 1),
             std::bind(&client::handle_write, this, _1));
     }
 
@@ -172,8 +174,15 @@ private:
         if (!error)
         {
             // Wait 10 seconds before sending the next heartbeat.
-            heartbeat_timer_.expires_after(std::chrono::seconds(10));
-            heartbeat_timer_.async_wait(std::bind(&client::start_write, this));
+            //heartbeat_timer_.expires_after(std::chrono::seconds(10));
+            //heartbeat_timer_.async_wait(std::bind(&client::start_write, this));
+            char message[128] = { 0, };
+            cin >> message;
+            int nMsgLen = strnlen_s(message, 128 - 1);
+            boost::system::error_code ignored_error;
+            socket_.write_some(boost::asio::buffer(message, nMsgLen), ignored_error);
+            cout << "Sent?Message:?" << message << endl;
+        
         }
         else
         {

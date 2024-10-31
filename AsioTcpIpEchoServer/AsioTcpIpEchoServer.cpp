@@ -15,16 +15,20 @@
 * 6. 서버 정상 종료
 */
 
+const unsigned short PORT_NUMBER = 3100;
+
 int main()
 {
     boost::asio::io_context io_context;
 
     // server s(io_context, std::atoi(argv[1])); 
-    server s(io_context, 3333/*port*/);
+    server s(io_context, PORT_NUMBER);
 
     try
     {
+        cout << "Server Listening..." << endl;
         io_context.run();
+        cout << "Close Listening..." << endl;
     }
     catch (std::exception& e)
     {
