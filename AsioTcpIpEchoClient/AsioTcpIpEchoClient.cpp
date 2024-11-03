@@ -63,7 +63,8 @@
 //
 
 const std::string& SERVER_IP = "127.0.0.1";
-const std::string& PORT_NUMBER = "3100";
+//const std::string& PORT_NUMBER = "3100";
+const unsigned short PORT_NUMBER = 3100;
 # define BOOST_ASIO_STRING_VIEW_PARAM const std::string&
 
 int main()
@@ -76,9 +77,9 @@ int main()
     {
         //c.start(r.resolve(argv[1], argv[2])); -- "Usage: client <host> <port>\n";
         //c.start(r.resolve(q)); 
-        c.start(r.resolve(SERVER_IP, PORT_NUMBER));
+        c.start(r.resolve(SERVER_IP, to_string(PORT_NUMBER)));
 
-        cout << "Client On..." << endl;
+        cout << "클라이언트가 하나 켜졌삼..." << endl;
         io_context.run();
         cout << "Client Off..." << endl;
     }

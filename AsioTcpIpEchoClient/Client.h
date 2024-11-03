@@ -58,7 +58,7 @@ private:
     {
         if (endpoint_iter != endpoints_.end())
         {
-            std::cout << "Trying " << endpoint_iter->endpoint() << "...\n";
+            std::cout << "IP 주소가 " << endpoint_iter->endpoint() << "인 서버에 연결해보겠삼...\n";
 
             // Set a deadline for the connect operation.
             deadline_.expires_after(std::chrono::seconds(60));
@@ -108,7 +108,7 @@ private:
         // Otherwise we have successfully established a connection.
         else
         {
-            std::cout << "Connected to " << endpoint_iter->endpoint() << "\n";
+            std::cout << endpoint_iter->endpoint() << "서버에 연결됐삼..." << "\n";
 
             // Start the input actor.
             start_read();
@@ -162,7 +162,7 @@ private:
             return;
 
         // Start an asynchronous operation to send a heartbeat message.
-        boost::asio::async_write(socket_, boost::asio::buffer("hey\n", 1),
+        boost::asio::async_write(socket_, boost::asio::buffer("\n", 1),
             std::bind(&client::handle_write, this, _1));
     }
 
@@ -177,12 +177,12 @@ private:
             //heartbeat_timer_.expires_after(std::chrono::seconds(10));
             //heartbeat_timer_.async_wait(std::bind(&client::start_write, this));
             char message[128] = { 0, };
+            cout << "서버에 보낼 메시지 입력 ㄱㄱ : ";
             cin >> message;
+            strcat_s(message, "\0");
             int nMsgLen = strnlen_s(message, 128 - 1);
             boost::system::error_code ignored_error;
-            socket_.write_some(boost::asio::buffer(message, nMsgLen), ignored_error);
-            cout << "Sent?Message:?" << message << endl;
-        
+            socket_.write_some(boost::asio::buffer(message, nMsgLen + 1), ignored_error);
         }
         else
         {

@@ -26,9 +26,9 @@ int main()
 
     try
     {
-        cout << "Server Listening..." << endl;
+        cout << "서버가 클라이언트를 기다림..." << endl;
         io_context.run();
-        cout << "Close Listening..." << endl;
+        cout << "서버 이제 클라 안기다리림..." << endl;
     }
     catch (std::exception& e)
     {

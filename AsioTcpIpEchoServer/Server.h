@@ -21,7 +21,7 @@ public:
 
     void start()
     {
-        cout << "Create Session..." << endl;
+        cout << "세션을 하나 열었삼..." << endl;
         do_read();
     }
 
@@ -34,7 +34,10 @@ private:
             {
                 if (!ec)
                 {
-                    cout << "Do Write..." << endl;
+                    if (length > 1)
+                    {
+                        cout << "클라가 이런 메시지를 보내왔네영 [" << data_ << "]" << endl;
+                    }
                     do_write(length);
                 }
             });
@@ -48,7 +51,6 @@ private:
             {
                 if (!ec)
                 {
-                    cout << "Do read..." << endl;
                     do_read();
                 }
             });
@@ -79,7 +81,7 @@ private:
                     std::make_shared<session>(std::move(socket))->start();
                 }
 
-                cout << "Do Accept..." << endl;
+                cout << "클라 하나 오셨삼..." << endl;
                 do_accept();
             });
     }
