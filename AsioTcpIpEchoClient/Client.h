@@ -27,11 +27,8 @@ public:
     {
     }
 
-    // Called by the user of the client class to initiate the connection process.
-    // The endpoints will have been obtained using a tcp::resolver.
     void start(tcp::resolver::results_type endpoints)
     {
-        // Start the connect actor.
         endpoints_ = endpoints;
         start_connect(endpoints_.begin());
 
@@ -108,10 +105,10 @@ private:
         // Otherwise we have successfully established a connection.
         else
         {
-            std::cout << endpoint_iter->endpoint() << "서버에 연결됐삼..." << "\n";
+            std::cout << endpoint_iter->endpoint() << "서버에 연결됐삼..." << endl;
 
             // Start the input actor.
-            start_read();
+            //start_read();
 
             // Start the heartbeat actor.
             start_write();
@@ -120,12 +117,9 @@ private:
 
     void start_read()
     {
-        // Set a deadline for the read operation.
-        deadline_.expires_after(std::chrono::seconds(30));
-
         // Start an asynchronous operation to read a newline-delimited message.
         boost::asio::async_read_until(socket_,
-            boost::asio::dynamic_buffer(input_buffer_), '\n',
+            boost::asio::dynamic_buffer(input_buffer_), '\0',
             std::bind(&client::handle_read, this, _1, _2));
     }
 
@@ -137,16 +131,16 @@ private:
         if (!error)
         {
             // Extract the newline-delimited message from the buffer.
-            std::string line(input_buffer_.substr(0, n - 1));
+            std::string line(input_buffer_.substr(1, n));
             input_buffer_.erase(0, n);
 
             // Empty messages are heartbeats and so ignored.
             if (!line.empty())
             {
-                std::cout << "Received: " << line << "\n";
+                cout << "서버로부터 반송된 메시지 :" << line << endl;
             }
 
-            start_read();
+            start_write();
         }
         else
         {
@@ -183,6 +177,8 @@ private:
             int nMsgLen = strnlen_s(message, 128 - 1);
             boost::system::error_code ignored_error;
             socket_.write_some(boost::asio::buffer(message, nMsgLen + 1), ignored_error);
+
+            start_read();
         }
         else
         {

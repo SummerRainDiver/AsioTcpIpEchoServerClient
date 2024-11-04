@@ -34,10 +34,6 @@ private:
             {
                 if (!ec)
                 {
-                    if (length > 1)
-                    {
-                        cout << "클라가 이런 메시지를 보내왔네영 [" << data_ << "]" << endl;
-                    }
                     do_write(length);
                 }
             });
@@ -45,12 +41,21 @@ private:
 
     void do_write(std::size_t length)
     {
+        if (length > 1)
+        {
+            cout << "클라가 이런 메시지를 보내왔네영 [" << data_ << "]" << endl;
+        }
+
+        //char loveletter[128] = "loveletter";
+
         auto self(shared_from_this());
+        //boost::asio::async_write(socket_, boost::asio::buffer(loveletter, sizeof(loveletter)),
         boost::asio::async_write(socket_, boost::asio::buffer(data_, length),
             [this, self](boost::system::error_code ec, std::size_t /*length*/)
             {
                 if (!ec)
                 {
+                    cout << "클라 메시지를 읽어오는중..." << endl;
                     do_read();
                 }
             });
