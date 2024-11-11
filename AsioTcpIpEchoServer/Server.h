@@ -21,7 +21,7 @@ public:
 
     void start()
     {
-        cout << "세션을 하나 열었삼..." << endl;
+        cout << "Session on..." << endl; // 세션풀 만들고 세션 마다 번호 붙여서 로그 찍혔으면 좋겠음.  
         do_read();
     }
 
@@ -43,7 +43,7 @@ private:
     {
         if (length > 1)
         {
-            cout << "클라가 이런 메시지를 보내왔네영 [" << data_ << "]" << endl;
+            cout << "Message from Client [" << data_ << "]" << endl;
         }
 
         //char loveletter[128] = "loveletter";
@@ -55,7 +55,7 @@ private:
             {
                 if (!ec)
                 {
-                    cout << "클라 메시지를 읽어오는중..." << endl;
+                    cout << "Trying to read Client message..." << endl;
                     do_read();
                 }
             });
@@ -86,7 +86,7 @@ private:
                     std::make_shared<session>(std::move(socket))->start();
                 }
 
-                cout << "클라 하나 오셨삼..." << endl;
+                cout << "Client connected..." << endl; // 여기도 클라마다 순번 부여하기.
                 do_accept();
             });
     }
